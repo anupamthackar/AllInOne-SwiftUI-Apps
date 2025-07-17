@@ -8,47 +8,117 @@
 import SwiftUI
 
 struct LandingView: View {
-   var body: some View {
-      TabView {
-         // MARK: - Concepts
-         Group{
-            NavigationStack {
-               ConceptView()
+    @State private var selectedTab: Int = 0
+    
+    var body: some View {
+       ZStack(alignment: .bottom) {
+            // Content
+            TabView(selection: $selectedTab) {
+                NavigationStack {
+                    ConceptView()
+                }
+                .tag(0)
+                
+                NavigationStack {
+                    VStack {
+                       AppMainView()
+                    }
+                }
+                .tag(1)
+                
+                NavigationStack {
+                    VStack {
+                        Text("Setting Upcoming")
+                    }
+                }
+                .tag(2)
             }
-            .tabItem {
-               Label("Concepts", systemImage: "rainbow")
-            }
-         }
-         
-         // MARK: - Apps
-         Group {
-            NavigationStack {
-               VStack {
-                  Text("Apps Upcoming")
-               }
-            }
-            .tabItem {
-               Label("Apps", systemImage: "storefront")
-            }
-         }
-         
-         // MARK: - Settings
-         Group {
-            NavigationStack {
-               VStack {
-                  Text("Setting Upcoming")
-               }
-            }
-            .tabItem {
-               Label("Settings", systemImage: "gear")
-                  
-            }
-         }
-      }
+            
+            CapsuleTabBar(selectedTab: $selectedTab)
+                .padding(.horizontal, 16)
+        }
+       .ignoresSafeArea(.keyboard)
+    }
+}
 
-//      .background(.gray)
-//      .clipShape(RoundedRectangle(cornerRadius: 20))
-   }
+struct CapsuleTabBar: View {
+    @Binding var selectedTab: Int
+    private let tabs: [TabItem] = [
+        TabItem(title: "Concepts", icon: "rainbow"),
+        TabItem(title: "Apps", icon: "storefront"),
+        TabItem(title: "Settings", icon: "gear")
+    ]
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(tabs.indices, id: \.self) { index in
+                Button(action: {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        selectedTab = index
+                    }
+                }) {
+                    CapsuleTabItem(
+                        title: tabs[index].title,
+                        icon: tabs[index].icon,
+                        isSelected: selectedTab == index
+                    )
+                }
+            }
+        }
+        .frame(height: 60)
+        .background(
+            ZStack {
+                Capsule()
+                    .fill(Color(.systemBackground))
+                    .shadow(color: Color.black.opacity(0.15), radius: 10, x: 5, y: 5)
+                    .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+            }
+        )
+        .overlay(
+            Capsule()
+                .stroke(Color.gray.opacity(0.2), lineWidth: 0.5)
+        )
+    }
+}
+
+struct CapsuleTabItem: View {
+    let title: String
+    let icon: String
+    let isSelected: Bool
+    
+    var body: some View {
+        VStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.system(size: 20, weight: .medium))
+                
+            Text(title)
+                .font(.caption2)
+                .fontWeight(.semibold)
+        }
+        .foregroundColor(isSelected ? .accentColor : .gray)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .background(
+            ZStack {
+                if isSelected {
+                    Capsule()
+                        .fill(Color(.systemBackground))
+                        .matchedGeometryEffect(id: "selectedTab", in: namespace)
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: -3, y: -3)
+                        .shadow(color: Color.white.opacity(0.7), radius: 5, x: 3, y: 3)
+                }
+            }
+        )
+        .scaleEffect(isSelected ? 1.05 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isSelected)
+    }
+    
+    @Namespace private var namespace
+}
+
+struct TabItem {
+    let title: String
+    let icon: String
 }
 
 #Preview {

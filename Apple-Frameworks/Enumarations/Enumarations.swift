@@ -11,10 +11,12 @@ import SwiftUI
 enum LandingViewGridItems: CaseIterable, Identifiable {
    
    case stateBinding
+   case mask
    case stateObjectObservedObject
    case navigation
    case environmentObject
    case attirbute
+   
    
    var id: String {
       switch self {
@@ -23,6 +25,7 @@ enum LandingViewGridItems: CaseIterable, Identifiable {
       case .navigation: return "navigation"
       case .environmentObject: return "environmentObject"
       case .attirbute: return "attirbute"
+      case .mask: return "mask"
       }
    }
    
@@ -33,8 +36,11 @@ enum LandingViewGridItems: CaseIterable, Identifiable {
       case .navigation: return "clock"
       case .environmentObject: return "math"
       case .attirbute: return "user"
+      case .mask: return "user"
+         
       }
    }
+   
    var title: String {
       switch self {
       case .stateBinding: return "State & Binding"
@@ -42,6 +48,7 @@ enum LandingViewGridItems: CaseIterable, Identifiable {
       case .navigation: return "Navigations"
       case .environmentObject: return "EnvironmentObject"
       case .attirbute: return "Attirbute"
+      case .mask: return "Mask"
       }
    }
    
@@ -58,6 +65,52 @@ enum LandingViewGridItems: CaseIterable, Identifiable {
          AnyView(StateBindView())
       case .attirbute:
          AnyView(StateBindView())
+      case .mask:
+         AnyView(Mask())
       }
    }
 }
+
+
+enum AppsViewGridItems: CaseIterable, Identifiable {
+   
+   case sectionKey
+   case svp
+   
+   var id: String {
+      switch self {
+      case .sectionKey: return "sectionKey"
+         
+      case .svp: return "svp"
+      }
+   }
+   
+   var icon: String {
+      switch self {
+      case .sectionKey: return "pin"
+      case .svp: return "doller"
+      }
+   }
+   
+   var title: String {
+      switch self {
+      case .sectionKey: return "List Section Header"
+      case .svp: return "SVP"
+      }
+   }
+   
+   @ViewBuilder
+   var destination: some View {
+      switch self {
+      case .sectionKey:
+         AnyView(SectionKey())
+         case .svp:
+         AnyView(LandmarkView())
+      }
+   }
+}
+
+
+
+
+
