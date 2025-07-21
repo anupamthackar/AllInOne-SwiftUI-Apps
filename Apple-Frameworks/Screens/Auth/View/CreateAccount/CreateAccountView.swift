@@ -10,7 +10,7 @@ import SwiftUI
 struct CreateAccountView: View {
 
    @EnvironmentObject var authViewModel: AuthViewModel
-
+   @Environment(\.dismiss) var dismiss
    @State private var email: String = ""
    @State private var fullName: String = ""
    @State private var password: String = ""
@@ -76,13 +76,16 @@ struct CreateAccountView: View {
                      fullName: fullName,
                      password: password
                   )
+                  if !authViewModel.isError {
+                     dismiss()
+                  }
                }
             },
             label: {
                Text("Create Account")
 
             })
-         .buttonStyle(CapsuleButtonStyle())
+         .buttonStyle(CapsuleButtonStyle(bgColor: .blue.opacity(0.8)))
       }
       .navigationTitle("Set Up Your Account")
       .toolbarRole(.editor)
@@ -96,4 +99,5 @@ struct CreateAccountView: View {
 
 #Preview {
    CreateAccountView()
+      .environmentObject(AuthViewModel())
 }

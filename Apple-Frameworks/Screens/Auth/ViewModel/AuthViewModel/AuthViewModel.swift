@@ -25,7 +25,23 @@ final class AuthViewModel: ObservableObject {
       }
    }
 
-func loadCurrnetUser() async {
+   private func deleteUser(by uid: String) {
+      firestore.collection("users").document(uid).delete()
+   }
+
+   func deleteAccount() async {
+      do {
+         userSession = nil
+         currentUser = nil
+         deleteUser(by: auth.currentUser?.uid ?? "")
+         try await auth.currentUser?.delete()
+
+      } catch {
+         isError = true
+      }
+   }
+
+   func loadCurrnetUser() async {
       if let user = auth.currentUser {
          userSession = user
          await fetchUser(by: user.uid)
@@ -53,7 +69,7 @@ func loadCurrnetUser() async {
          await fetchUser(by: authResult.user.uid)
          print("🧍🏻 Current User: \(String(describing: currentUser))")
       } catch {
-
+         isError = true
       }
    }
 

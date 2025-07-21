@@ -53,6 +53,9 @@ struct LoginView: View {
          .ignoresSafeArea()
          .padding(.horizontal)
          .padding(.vertical, 8)
+         .alert(
+            "Something Went Wrong",
+            isPresented: $authViewModel.isError){}
       }
    }
 
@@ -105,7 +108,12 @@ struct LoginView: View {
             Text("Login")
          }
       )
-      .buttonStyle(CapsuleButtonStyle())
+      .buttonStyle(
+         CapsuleButtonStyle(
+            bgColor: .blue.opacity(0.8),
+            textColor: .white
+         )
+      )
 
    }
 
@@ -156,7 +164,7 @@ struct LoginView: View {
             Text("Don't have an account?")
                .foregroundStyle(.black)
             Text("Signup")
-               .foregroundStyle(.teal)
+               .foregroundStyle(.blue.opacity(0.8))
          }
          .fontWeight(.medium)
       })
@@ -169,5 +177,6 @@ struct LoginView: View {
 
 #Preview {
    LoginView()
+      .environmentObject(AuthViewModel())
 }
 

@@ -19,6 +19,7 @@ struct ContentView: View {
             LandingView()
          }
       }
+      .animation(Animation.easeInOut(duration: 0.5), value: authViewModel.userSession)
       .environmentObject(authViewModel)
    }
 }
