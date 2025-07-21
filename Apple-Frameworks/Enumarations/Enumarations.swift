@@ -58,11 +58,11 @@ enum LandingViewGridItems: CaseIterable, Identifiable {
       case .stateBinding:
          AnyView(StateBindView())
       case .stateObjectObservedObject:
-         AnyView(StateBindView())
+         AnyView(StateObjectObservedObject())
       case .navigation:
          AnyView(StateBindView())
       case .environmentObject:
-         AnyView(StateBindView())
+            AnyView(EOHomeView())
       case .attirbute:
          AnyView(StateBindView())
       case .mask:

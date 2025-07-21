@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ConceptView: View {
+      
    private let data = 1..<10
    let adaptiveColumns = [GridItem(.adaptive(minimum: 150))]
    private let whiteGredient = LinearGradient(gradient: Gradient(colors: [.white, .white] ), startPoint: .topLeading, endPoint: .bottomTrailing)
