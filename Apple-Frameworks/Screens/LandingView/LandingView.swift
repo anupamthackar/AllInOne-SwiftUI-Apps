@@ -28,7 +28,7 @@ struct LandingView: View {
                 
                 NavigationStack {
                     VStack {
-                        Text("Setting Upcoming")
+                       ProfileView()
                     }
                 }
                 .tag(2)

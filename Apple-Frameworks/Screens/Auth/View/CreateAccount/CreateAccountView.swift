@@ -8,68 +8,86 @@
 import SwiftUI
 
 struct CreateAccountView: View {
+
+   @EnvironmentObject var authViewModel: AuthViewModel
+
    @State private var email: String = ""
    @State private var fullName: String = ""
    @State private var password: String = ""
    @State private var confirmPassword: String = ""
 
-    var body: some View {
-       VStack(spacing: 16) {
-          Text("Please complete all information to create an account.")
-             .font(.headline).fontWeight(.medium)
-             .foregroundColor(.gray)
-             .multilineTextAlignment(.center)
-             .padding(.vertical)
+   var body: some View {
+      VStack(spacing: 16) {
+         Image("Signup")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 200, height: 200)
 
-          InputView(
+         Text("Please complete all information to create an account.")
+            .font(.headline).fontWeight(.medium)
+            .foregroundColor(.gray)
+            .multilineTextAlignment(.center)
+            .padding(.vertical)
+
+         InputView(
             placeholder: "Email or Phone Number",
             isSecureField: false,
             text: $email
-          )
+         )
 
-          InputView(
+         InputView(
             placeholder: "Full Name",
             isSecureField: false,
             text: $fullName
-          )
+         )
 
-          InputView(
+         InputView(
             placeholder: "Password",
             isSecureField: true,
             text: $password
-          )
+         )
 
-          ZStack(alignment: .trailing) {
-             InputView(
+         ZStack(alignment: .trailing) {
+            InputView(
                placeholder: "Confirm Password",
                isSecureField: true,
                text: $confirmPassword
-             )
+            )
 
-             Spacer()
+            Spacer()
 
-             if !password.isEmpty && !confirmPassword.isEmpty {
-                Image(systemName: "\(isValidPassword ? "checkmark" : "xmark").circle.fill")
-                   .imageScale(.large)
-                   .fontWeight(.bold)
-                   .foregroundColor(
+            if !password.isEmpty && !confirmPassword.isEmpty {
+               Image(systemName: "\(isValidPassword ? "checkmark" : "xmark").circle.fill")
+                  .imageScale(.large)
+                  .fontWeight(.bold)
+                  .foregroundColor(
                      isValidPassword ? Color(.systemGreen) : Color(.systemRed))
-             }
-          }
+            }
+         }
 
 
-          Spacer()
+         Spacer()
 
-          Button(action: {}, label: {
-             Text("Create Account")
+         Button(
+            action: {
+               Task {
+                  await authViewModel.createUser(
+                     with: email,
+                     fullName: fullName,
+                     password: password
+                  )
+               }
+            },
+            label: {
+               Text("Create Account")
 
-          })
-          .buttonStyle(CapsuleButtonStyle())
-       }
-       .navigationTitle("Set Up Your Account")
-       .toolbarRole(.editor)
-       .padding()
-    }
+            })
+         .buttonStyle(CapsuleButtonStyle())
+      }
+      .navigationTitle("Set Up Your Account")
+      .toolbarRole(.editor)
+      .padding()
+   }
 
    var isValidPassword: Bool {
       confirmPassword == password
@@ -77,5 +95,5 @@ struct CreateAccountView: View {
 }
 
 #Preview {
-    CreateAccountView()
+   CreateAccountView()
 }
