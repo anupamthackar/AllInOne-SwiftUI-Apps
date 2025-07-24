@@ -17,14 +17,25 @@ class AppDelegate: NSObject, UIApplicationDelegate{
 
 @main
 struct Apple_FrameworksApp: App {
+
    @StateObject private var authViewModel = AuthViewModel()
+
    // register app delegate
    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
-    var body: some Scene {
-        WindowGroup {
+   @ObservedObject private var authRouter = AuthRouter()
+
+   var body: some Scene {
+      WindowGroup {
+         NavigationStack(path: $authRouter.path){
             ContentView()
-              .environmentObject(authViewModel)
-        }
-    }
+               .navigationDestination(
+                  for: AuthRouter.AuthFlow.self) { destination in
+                     authRouter.destination(for: destination)
+                  }
+         }
+         .environmentObject(authViewModel)
+         .environmentObject(authRouter)
+      }
+   }
 }

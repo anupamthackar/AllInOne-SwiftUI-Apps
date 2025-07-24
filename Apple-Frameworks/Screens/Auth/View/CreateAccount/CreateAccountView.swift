@@ -10,14 +10,19 @@ import SwiftUI
 struct CreateAccountView: View {
 
    @EnvironmentObject var authViewModel: AuthViewModel
-   @Environment(\.dismiss) var dismiss
    @State private var email: String = ""
    @State private var fullName: String = ""
    @State private var password: String = ""
    @State private var confirmPassword: String = ""
+   @EnvironmentObject var authRouter: AuthRouter
 
+   // Data ismai mil raha hai jab navigate kar rahe hai login seh yaha
+   @State var item: Item
+   @State var name: String
    var body: some View {
       VStack(spacing: 16) {
+//         Text(item.name)
+//         Text(name)
          Image("Signup")
             .resizable()
             .scaledToFit()
@@ -33,7 +38,7 @@ struct CreateAccountView: View {
             placeholder: "Email or Phone Number",
             isSecureField: false,
             text: $email
-         )
+         ).keyboardType(.emailAddress)
 
          InputView(
             placeholder: "Full Name",
@@ -77,7 +82,7 @@ struct CreateAccountView: View {
                      password: password
                   )
                   if !authViewModel.isError {
-                     dismiss()
+                     authRouter.pop()
                   }
                }
             },
@@ -98,6 +103,6 @@ struct CreateAccountView: View {
 }
 
 #Preview {
-   CreateAccountView()
+   CreateAccountView(item: .init(name: "sad", price: 8.9), name: "askjbfksab")
       .environmentObject(AuthViewModel())
 }

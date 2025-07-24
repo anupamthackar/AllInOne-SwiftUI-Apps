@@ -52,24 +52,23 @@ enum LandingViewGridItems: CaseIterable, Identifiable {
       }
    }
    
-   @ViewBuilder
-   var destination: some View {
-      switch self {
-      case .stateBinding:
-         AnyView(StateBindView())
-      case .stateObjectObservedObject:
-         AnyView(StateObjectObservedObject())
-      case .navigation:
-         AnyView(StateBindView())
-      case .environmentObject:
-            AnyView(EOHomeView())
-      case .attirbute:
-         AnyView(StateBindView())
-      case .mask:
-         AnyView(Mask())
-      }
-   }
-}
+
+   var destination: ConceptRouter.ConceptFlow {
+       switch self {
+       case .stateBinding:
+           return .bindState
+       case .stateObjectObservedObject:
+           return .stateObjectObservedObject
+       case .navigation:
+             return .stateObjectObservedObject
+       case .environmentObject:
+           return .environmentObject
+       case .attirbute:
+             return .stateObjectObservedObject
+       case .mask:
+           return .mask
+       }
+   }}
 
 
 enum AppsViewGridItems: CaseIterable, Identifiable {
@@ -95,17 +94,14 @@ enum AppsViewGridItems: CaseIterable, Identifiable {
    var title: String {
       switch self {
       case .sectionKey: return "List Section Header"
-      case .svp: return "SVP"
+      case .svp: return "Landmark"
       }
    }
-   
-   @ViewBuilder
-   var destination: some View {
+
+   var destination: AppRouter.AppFlow {
       switch self {
-      case .sectionKey:
-         AnyView(SectionKey())
-         case .svp:
-         AnyView(LandmarkView())
+         case .sectionKey: return .sectionKey
+         case .svp: return .landmark
       }
    }
 }

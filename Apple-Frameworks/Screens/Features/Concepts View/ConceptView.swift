@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ConceptView: View {
-      
+   @EnvironmentObject var conceptRouter: ConceptRouter
    private let data = 1..<10
    let adaptiveColumns = [GridItem(.adaptive(minimum: 150))]
    private let whiteGredient = LinearGradient(gradient: Gradient(colors: [.white, .white] ), startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -29,22 +29,38 @@ struct ConceptView: View {
                ScrollView {
                   LazyVGrid(columns: adaptiveColumns) {
                      ForEach(LandingViewGridItems.allCases, id: \.self) { item in
-                        
-                        NavigationLink(destination: item.destination) {
+                        Button(action: {
+                           conceptRouter.navigate(to: item.destination)
+                        }, label: {
                            VStack {
                               Image("\(item.icon)")
                                  .resizable()
                                  .scaledToFit()
                                  .frame(width: 100, height: 100, alignment: .center)
-                              
+
                               Text("\(item.title)")
                                  .foregroundStyle(.black)
                                  .font(.headline)
                                  .fontWeight(.light)
                                  .multilineTextAlignment(.center)
                            }
-                        }
-                        .padding()
+                        })
+
+//                        NavigationLink(destination: item.destination) {
+////                           VStack {
+////                              Image("\(item.icon)")
+////                                 .resizable()
+////                                 .scaledToFit()
+////                                 .frame(width: 100, height: 100, alignment: .center)
+////                              
+////                              Text("\(item.title)")
+////                                 .foregroundStyle(.black)
+////                                 .font(.headline)
+////                                 .fontWeight(.light)
+////                                 .multilineTextAlignment(.center)
+////                           }
+//                        }
+//                        .padding()
                      }
                   }
                   .padding()
@@ -62,4 +78,5 @@ struct ConceptView: View {
 
 #Preview {
     ConceptView()
+      .environmentObject(AuthRouter())
 }

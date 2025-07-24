@@ -10,57 +10,56 @@ import SwiftUI
 struct LoginView: View {
 
    @EnvironmentObject var authViewModel: AuthViewModel
+   @EnvironmentObject var authRouter: AuthRouter
 
+   @State var navigateToForget: Bool = false
    @State var email: String = ""
    @State var password: String = ""
    var body: some View {
-      NavigationStack {
-         ScrollView {
-            VStack(spacing: 16) {
-               // Logo
-               logo
+      ScrollView {
+         VStack(spacing: 16) {
+            // Logo
+            logo
 
-               // Title
-               titleView
+            // Title
+            titleView
 
-               Spacer().frame(height: 12)
+            Spacer().frame(height: 12)
 
-               // Input Field
-               InputView(
-                  placeholder: "Email or Phone number",
-                  isSecureField: false,
-                  text: $email
-               )
-               InputView(
-                  placeholder: "Password",
-                  isSecureField: true,
-                  text: $password
-               )
-               
-               // forget button
-               forgotButton
+            // Input Field
+            InputView(
+               placeholder: "Email or Phone number",
+               isSecureField: false,
+               text: $email
+            )
+            InputView(
+               placeholder: "Password",
+               isSecureField: true,
+               text: $password
+            )
 
-               // login buttom
-               loginButton
+            // forget button
+            forgotButton
 
-               Spacer()
+            // login buttom
+            loginButton
 
-               // bottom view
-               bottomView
+            Spacer()
 
-            }
+            // bottom view
+            bottomView
+
          }
-         .ignoresSafeArea()
-         .padding(.horizontal)
-         .padding(.vertical, 8)
-         .alert(
-            "Something Went Wrong",
-            isPresented: $authViewModel.isError){}
       }
+      .ignoresSafeArea()
+      .padding(.horizontal)
+      .padding(.vertical, 8)
+      .alert("Something Went Wrong", isPresented: $authViewModel.isError){}
+
    }
 
    private var bottomView: some View {
-      VStack(spacing: 16){
+      VStack(spacing: 16) {
          lineOrView
          appleButton
          googleButton
@@ -86,7 +85,10 @@ struct LoginView: View {
          Spacer()
 
          Button(
-            action: {},
+            action: {
+               //               navigateToForget = true
+               authRouter.navigate(to: .forgotPassword)
+            },
             label: {
                Text("Foreget Password?")
                   .foregroundStyle(.gray)
@@ -159,15 +161,20 @@ struct LoginView: View {
    }
 
    private var footerView: some View {
-      NavigationLink(destination: {CreateAccountView().environmentObject(authViewModel)}, label: {
-         HStack {
-            Text("Don't have an account?")
-               .foregroundStyle(.black)
-            Text("Signup")
-               .foregroundStyle(.blue.opacity(0.8))
-         }
-         .fontWeight(.medium)
-      })
+
+      Button(
+         action: {
+            authRouter.navigate(to: .createAccount(items: .init(name: "Anupam", price: 30.3), name: "Thackar"))
+         },
+         label: {
+            HStack {
+               Text("Don't have an account?")
+                  .foregroundStyle(.black)
+               Text("Signup")
+                  .foregroundStyle(.blue.opacity(0.8))
+            }
+            .fontWeight(.medium)
+         })
    }
 
    private var line: some View {

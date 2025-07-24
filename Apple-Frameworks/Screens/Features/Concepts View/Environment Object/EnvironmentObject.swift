@@ -32,6 +32,7 @@
    
    // MARK: - Main View
    struct EOMainView: View {
+
          @State var cartStore: EOCartManager
          @State var productName: String = ""
          @State var productCost: String = ""
